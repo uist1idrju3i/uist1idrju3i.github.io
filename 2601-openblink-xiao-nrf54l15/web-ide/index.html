@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenBlink XIAO nRF54L15 WebIDE</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="codemirror/codemirror.css" />
+    <link rel="stylesheet" href="codemirror/theme/dracula.css" />
+  </head>
+  <body>
+    <h1>OpenBlink XIAO nRF54L15 WebIDE</h1>
+    <div class="description">
+      OpenBlink XIAO nRF54L15 WebIDEは、mrubyコードを書いて、Seeed Studio XIAO nRF54L15に転送するためのツールです。
+      <ul>
+        <li>Seeed Studio XIAO nRF54L15には予め<a href="https://github.com/uist1idrju3i/openblink_XIAO_nRF54L15_Sense">OpenBlink XIAO nRF54L15 firmware</a>を書き込んでおく必要があります。</li>
+        <li>Firmwareの書き込みには実験的な<a href="../web-flasher/index.html">XIAO nRF54L15 Web Flasher (Unofficial tool)</a>を公開しています。</li>
+      </ul>
+    </div>
+    <hr />
+    <div class="step">
+      <div class="step-title">Step1: デバイスに接続する</div>
+      <div class="step-description">
+        「Connect to device」ボタンをクリックして、Bluetoothデバイス選択ダイアログからOpenBlinkデバイスを選択します。
+      </div>
+      <button id="ble-connect">Connect to device</button>
+    </div>
+    <hr />
+    <div class="step">
+      <div class="step-title">Step2: Rubyコードを書く</div>
+      <div class="step-description">
+        エディタにRubyコードを記述します。サンプルコードを参考に、独自のプログラムを作成できます。
+      </div>
+      <textarea id="ruby-code"></textarea>
+    </div>
+    <hr />
+    <div class="step">
+      <div class="step-title">Step3: ビルドして転送する</div>
+      <div class="step-description">
+        「Build&Blink」ボタンをクリックして、コードをコンパイルし、デバイスに転送します。<br />
+        転送が完了すると、プログラムが自動的に実行されます。<br />
+        「Soft RESET」ボタンでデバイスをリセットできます。
+      </div>
+      <button id="run-main">Build&Blink</button> &nbsp; &nbsp; &nbsp;
+      <button id="soft-reset">Soft RESET</button>
+    </div>
+    <div id="consoleOutput"></div>
+    <div class="reference">
+    <h2>利用可能な関数リファレンス</h2>
+      <h3>スイッチ制御</h3>
+      <ul>
+        <li><code>Input.pressed?(part: :sw1)</code> - ボタンが押されたかどうかを返す</li>
+        <li><code>Input.released?(part: :sw1)</code> - ボタンが離されたかどうかを返す</li>
+      </ul>
+      <h3>6x10 RGB MATRIX for XIAO制御</h3>
+      <ul>
+        <li><code>PIXELS.set(index, r, g, b)</code> - 指定したインデックスのピクセルを指定した色に設定する</li>
+        <li><code>PIXELS.update</code> - マトリクスに設定を反映する</li>
+      </ul>
+      <h3>LED制御</h3>
+      <ul>
+        <li><code>LED.set(part: :led1, state: true)</code> - LEDを消灯する</li>
+        <li><code>LED.set(part: :led1, state: false)</code> - LEDを点灯する</li>
+      </ul>
+      <h3>タイマー</h3>
+      <ul>
+        <li><code>sleep (seconds)</code> - 指定した秒数だけ待機</li>
+        <li>
+          <code>sleep_ms (milli seconds)</code> - 指定したミリ秒だけ待機
+        </li>
+      </ul>
+    </div>
+    <hr />
+    <h2>参考リンク</h2>
+    <ul style="line-height:1.7;">
+      <li>Seeed Studio XIAO nRF54L15: <a href="https://wiki.seeedstudio.com/xiao_nrf54l15_sense_getting_started/">https://wiki.seeedstudio.com/xiao_nrf54l15_sense_getting_started/</a></li>
+      <li>6x10 RGB MATRIX for XIAO: <a href="https://wiki.seeedstudio.com/rgb_matrix_for_xiao/">https://wiki.seeedstudio.com/rgb_matrix_for_xiao/</a></li>
+      <li>OpenBlink WebIDE: <a href="https://github.com/OpenBlink/openblink-webide/">https://github.com/OpenBlink/openblink-webide/</a> &nbsp; <a href="https://deepwiki.com/OpenBlink/openblink-webide" target="_blank"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki" style="vertical-align: middle;"></a></li>
+      <li>OpenBlink XIAO nRF54L15 firmware: <a href="https://github.com/uist1idrju3i/openblink_XIAO_nRF54L15_Sense/">https://github.com/uist1idrju3i/openblink_XIAO_nRF54L15_Sense/</a> &nbsp; <a href="https://deepwiki.com/uist1idrju3i/openblink_XIAO_nRF54L15_Sense" target="_blank"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki" style="vertical-align: middle;"></a></li>
+      <li>XIAO nRF54L15 Web Flasher (Unofficial tool): <a href="https://github.com/uist1idrju3i/xiao-nrf54l15-web-flasher/">https://github.com/uist1idrju3i/xiao-nrf54l15-web-flasher/</a> &nbsp; <a href="https://deepwiki.com/uist1idrju3i/xiao-nrf54l15-web-flasher" target="_blank"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki" style="vertical-align: middle;"></a></li>
+    </ul>
+    <script src="codemirror/codemirror.js"></script>
+    <script src="codemirror/mode/ruby/ruby.js"></script>
+    <script src="codemirror/addon/edit/matchbrackets.js"></script>
+    <script src="codemirror.js"></script>
+    <script src="mrbc/mrbc.js"></script>
+    <script src="crc.js"></script>
+    <script src="blink.js"></script>
+  </body>
+</html>
